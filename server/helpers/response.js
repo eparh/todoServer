@@ -6,15 +6,13 @@ const { serverError, success } = require('../constants').STATUS_CODES;
 
 class Response {
     wrap(fn) {
-        const self = this;
-
         return async (ctx, next) => {
             try {
                 const data = await fn(ctx, next);
 
-                self.send(ctx, null, data);
+                this.send(ctx, null, data);
             } catch (err) {
-                self.send(ctx, err);
+                this.send(ctx, err);
             }
         };
     }

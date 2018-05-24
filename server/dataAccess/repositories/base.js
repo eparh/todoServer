@@ -11,31 +11,27 @@ class BaseRepository {
     }
 
     async find(query, attributes) {
-        const self = this;
         const models = await this.Model.find(query, attributes);
 
-        return self.toJSON(models);
+        return this.toJSON(models);
     }
 
     async findOne(query, attributes) {
-        const self = this;
         const model = await this.Model.findOne(query, attributes);
 
-        return self.toJSON(model);
+        return this.toJSON(model);
     }
 
     async findById(id) {
-        const self = this;
         const model = await this.Model.findById(id);
 
-        return self.toJSON(model);
+        return this.toJSON(model);
     }
 
     async create(info) {
-        const self = this;
-        const newModel = await self.Model.create(info);
+        const newModel = await this.Model.create(info);
 
-        return self.toJSON(newModel);
+        return this.toJSON(newModel);
     }
 
     update(query, info, opts) {

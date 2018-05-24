@@ -8,7 +8,7 @@ class DateTimeHelper {
     }
 
     getExpirationDate() {
-        return Math.floor(Date.now() / nanosecondToSecondRatio) + this.getHourLength() * 24; // 1 hour
+        return Math.floor(Date.now() / nanosecondToSecondRatio) + this.getHourLength(); // 1 hour
     }
 }
 

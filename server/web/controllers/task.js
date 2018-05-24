@@ -1,8 +1,8 @@
 'use strict';
 
 const mapper = require('../../helpers/mapper');
-const taskService = require('../../businessLogic/services/task');
-const TaskModel = require('../../businessLogic/models/task');
+const taskService = require('../../domain/services/task');
+const TaskModel = require('../../domain/models/task');
 
 class TaskController {
     async getTask(ctx) {
@@ -13,8 +13,17 @@ class TaskController {
         return mapper.map(TaskModel, 'TaskViewModel', task);
     }
 
-    async getTasks() {
-        const tasks = await taskService.findAll();
+    async getTasks(ctx) {
+        const userId = ctx.state.user.id;
+        const { isCompleted } = ctx.request.query;
+        const tasks = await taskService.findTasks(userId, isCompleted);
+
+        return mapper.mapArray(TaskModel, 'TaskViewModel', tasks);
+    }
+
+    async deleteCompletedTasks(ctx) {
+        const userId = ctx.state.user.id;
+        const tasks = await taskService.deleteCompletedTasks(userId);
 
         return mapper.mapArray(TaskModel, 'TaskViewModel', tasks);
     }
@@ -36,6 +45,13 @@ class TaskController {
         const updatedTask = await taskService.updateTask(id, task, user);
 
         return mapper.map(TaskModel, 'TaskViewModel', updatedTask);
+    }
+
+    async completeTasks(ctx) {
+        const userId = ctx.state.user.id;
+        const tasks = await taskService.completeTasks(userId);
+
+        return mapper.mapArray(TaskModel, 'TaskViewModel', tasks);
     }
 
     deleteTask(ctx) {

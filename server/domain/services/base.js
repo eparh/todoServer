@@ -17,28 +17,30 @@ class BaseService {
         const { Model, mappingDataPath, repository } = this;
         const item = await repository.findById(id);
 
-        return mapper.map(mappingDataPath, Model, item);
+        return item && !item.isDeleted && mapper.map(mappingDataPath, Model, item);
     }
 
     async findOneByQuery(query) {
         const { Model, mappingDataPath, repository } = this;
         const item = await repository.findOne(query);
 
-        return mapper.map(mappingDataPath, Model, item);
+        return item && !item.isDeleted && mapper.map(mappingDataPath, Model, item);
     }
 
     async findByQuery(query) {
         const { Model, mappingDataPath, repository } = this;
         const item = await repository.find(query);
 
-        return mapper.mapArray(mappingDataPath, Model, item);
+        return mapper
+            .mapArray(mappingDataPath, Model, item.filter(item => !item.isDeleted));
     }
 
     async findAll() {
         const { Model, mappingDataPath, repository } = this;
         const items = await repository.findAll();
 
-        return mapper.mapArray(mappingDataPath, Model, items);
+        return mapper
+            .mapArray(mappingDataPath, Model, items.filter(item => !item.isDeleted));
     }
 
     async create(item, beforeCreate) {
@@ -69,9 +71,15 @@ class BaseService {
         const dataModel = mapper.map(Model, mappingDataPath, item);
 
         await repository.updateById(id, dataModel);
-        const updatedModel = await repository.getById(id);
+        const updatedModel = await repository.findById(id);
 
         return mapper.map(mappingDataPath, Model, updatedModel);
+    }
+
+    async updateByQuery(query, item, opts) {
+        const { Model, mappingDataPath, repository } = this;
+
+        return repository.update(query, item, opts);
     }
 
     async removeById(id, user) {
@@ -92,7 +100,7 @@ class BaseService {
 
         const currentDataModel = await repository.findById(id);
 
-        if (!currentDataModel) {
+        if (!currentDataModel || currentDataModel.isDeleted) {
             throw new ConflictError(`${itemName} with id ${id} does not exist`);
         }
 

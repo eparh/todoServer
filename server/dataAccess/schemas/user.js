@@ -9,9 +9,10 @@ class UserSchema extends BaseSchema {
         } = this;
 
         return new Schema({
-            email: unique(required(ofType(String))),
+            login: unique(required(ofType(String))),
             password: required(ofType(String)),
-            role: trim(lowercase(withDefault(toEnum(required(ofType(String)), ['admin', 'user']), 'user')))
+            role: trim(lowercase(withDefault(toEnum(required(ofType(String)), ['admin', 'user']), 'user'))),
+            isDeleted: withDefault(ofType(Boolean), false),
         });
     }
 }

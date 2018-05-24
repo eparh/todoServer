@@ -2,17 +2,17 @@
 
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const userService = require('../../../businessLogic/services/user');
+const userService = require('../../../domain/services/user');
 const dateTimeHelper = require('../../../helpers/dateTimeHelper');
 
 const secret = config.get('jwt.secret');
 const { unauthorized, success } = require('../../../constants/index').STATUS_CODES;
 
 module.exports = async (ctx) => {
-    const { request: { body: { email, password } } } = ctx;
+    const { request: { body: { login, password } } } = ctx;
 
-    if (await userService.isCredentialsValid(email, password)) {
-        const { id, role } = await userService.findByEmail(email);
+    if (await userService.isCredentialsValid(login, password)) {
+        const { id, role } = await userService.findByLogin(login);
 
         ctx.status = success;
         ctx.body = {

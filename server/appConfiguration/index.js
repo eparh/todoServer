@@ -7,7 +7,7 @@ const configValidator = require('./validator');
 const configRequestLogging = require('./requestLogging');
 const configRouting = require('./routing/index');
 
-require('../businessLogic/mappings');
+require('../domain/mappings');
 
 module.exports = (app) => {
     connectToDatabase();

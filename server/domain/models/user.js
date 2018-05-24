@@ -1,9 +1,9 @@
 'use strict';
 
 class User {
-    constructor(id, email, password, encryptedPassword, role) {
+    constructor(id, login, password, encryptedPassword, role) {
         this.id = id;
-        this.email = email;
+        this.login = login;
         this.password = password;
         this.encryptedPassword = encryptedPassword;
         this.role = role;

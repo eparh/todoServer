@@ -5,13 +5,14 @@ const BaseSchema = require('./base');
 class TaskSchema extends BaseSchema {
     get() {
         const {
-            Schema, ofType, required, objectRef, includeVirtuals, withTimeStamps
+            Schema, ofType, required, objectRef, includeVirtuals, withTimeStamps, withDefault
         } = this;
 
         return new Schema({
             author: required(objectRef('User')),
-            title: required(ofType(String)),
-            description: required(ofType(String))
+            description: required(ofType(String)),
+            isCompleted: withDefault(ofType(Boolean), false),
+            isDeleted: withDefault(ofType(Boolean), false)
         },
         withTimeStamps(includeVirtuals())
         );

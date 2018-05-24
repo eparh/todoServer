@@ -1,8 +1,8 @@
 'use strict';
 
 const mapper = require('../../helpers/mapper');
-const userService = require('../../businessLogic/services/user');
-const UserModel = require('../../businessLogic/models/user');
+const userService = require('../../domain/services/user');
+const UserModel = require('../../domain/models/user');
 
 class UserController {
     async register(ctx) {

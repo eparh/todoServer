@@ -1,10 +1,10 @@
 'use strict';
 
 class Task {
-    constructor(id, author, title, description) {
+    constructor(id, author, description, isCompleted) {
         this.id = id;
         this.author = author;
-        this.title = title;
+        this.isCompleted = isCompleted;
         this.description = description;
     }
 }

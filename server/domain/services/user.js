@@ -1,6 +1,6 @@
 'use strict';
 
-const bCryptService = require('../../businessLogic/services/external/bcrypt');
+const bCryptService = require('..//services/external/bcrypt');
 const BaseService = require('./base');
 const userRepository = require('../../dataAccess/repositories/user');
 const UserModel = require('../models/user');
@@ -13,19 +13,19 @@ class UserService extends BaseService {
     }
 
     async register(user) {
-        const { email } = user;
-        const existedUser = await this.findByEmail(email);
+        const { login } = user;
+        const existedUser = await this.findByLogin(login);
 
         if (existedUser) {
-            throw new ConflictError(`User with email ${email} already exists`);
+            throw new ConflictError(`User with login ${login} already exists`);
         }
 
         return this.create(user, this._processUserData);
     }
 
-    async findByEmail(email) {
+    async findByLogin(login) {
         return this.findOneByQuery({
-            email
+            login
         });
     }
 
@@ -33,8 +33,8 @@ class UserService extends BaseService {
         return bCryptService.validatePassword(password, passwordInDB);
     }
 
-    async isCredentialsValid(email, password) {
-        const user = await this.findByEmail(email);
+    async isCredentialsValid(login, password) {
+        const user = await this.findByLogin(login);
 
         return user && this.validatePassword(password, user.password);
     }
